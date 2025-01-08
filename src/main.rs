@@ -20,11 +20,17 @@ async fn main() -> std::io::Result<()> {
             .service(hello)
             .service(echo)
             .service(count)
+            .route("/getnumb", web::get().to(get_number))
             .route("/hey", web::get().to(manual_hello))
     })
     .bind(("127.0.0.1", 8080))?
     .run()
     .await
+}
+
+async fn get_number() -> impl Responder {
+    let number: i32 = 123;
+    HttpResponse::Ok().body(number.to_string())
 }
 
 #[get("/counter")]
